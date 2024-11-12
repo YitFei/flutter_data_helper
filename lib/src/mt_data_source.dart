@@ -33,6 +33,6 @@ class MTDatasourceConfig<T extends MTData> {
   final T Function(Map<String, dynamic>) fromMap;
   MTDatasourceConfig(
       {required this.tableName,
-      required this.primaryKeyName,
+      this.primaryKeyName = "id",
       required this.fromMap});
 }
