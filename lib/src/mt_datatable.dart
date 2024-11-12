@@ -30,7 +30,7 @@ class MTDatatable<E extends MTData> {
   }
 
   void load(List<MTDataRow<E>> rows) {
-    this.rows.addAll(rows.map((row) => row..rowState = RowState.unchanged));
+    this.rows.addAll(rows, rowState: RowState.unchanged);
   }
 
   void _loadRowsWrapper() {

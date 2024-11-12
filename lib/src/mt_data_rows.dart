@@ -68,28 +68,40 @@ class MTDataRows<E extends MTData> extends ListBase<MTDataRow<E>> {
   }
 
   @override
-  void add(MTDataRow<E> element) {
+  void add(MTDataRow<E> element, {RowState rowState = RowState.added}) {
     element.onModified = (colName, row) {
       onRowModified?.call(colName, row);
     };
     _innerList.add(element);
-    element.rowState = RowState.added;
+    element.rowState = rowState;
     onRowAdded?.call(element);
   }
 
   @override
-  void insert(int index, MTDataRow<E> element) {
+  void addAll(Iterable<MTDataRow<E>> iterable,
+      {RowState rowState = RowState.added}) {
+    for (var element in iterable) {
+      add(element, rowState: rowState);
+    }
+  }
+
+  @override
+  void insert(int index, MTDataRow<E> element,
+      {RowState rowState = RowState.added}) {
     if (index < 0 || index > length) {
       throw RangeError.index(index, this, 'index');
     }
+    element.onModified = (colName, row) {
+      onRowModified?.call(colName, row);
+    };
     if (index == length) {
-      add(element);
+      _innerList.add(element);
     } else {
       int actualIndex = _activeIndices[index];
       _innerList.insert(actualIndex, element);
-      element.rowState = RowState.added;
-      onRowAdded?.call(element);
     }
+    element.rowState = rowState;
+    onRowAdded?.call(element);
   }
 
   @override

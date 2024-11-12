@@ -32,11 +32,11 @@ class MTDataAdapter<T extends MTData> {
     final List<T> dataList = await dataSource.fetchData();
 
     _datatable.clear();
-    _datatable.rows.addAll(dataList.map((data) => MTDataRow(data: data)));
+    _datatable.load(dataList.map((data) => MTDataRow(data: data)).toList());
     _originalDatatable = _datatable.deepCopy();
   }
 
-  void update({bool acceptChanges = true}) async {
+  Future<void> update({bool acceptChanges = true}) async {
     RowChanges<T> rowChanges = datatable.getChanges();
 
     await dataSource.batchInsertData(rowChanges.inserted);
