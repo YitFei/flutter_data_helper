@@ -1,6 +1,7 @@
 import 'dart:async';
+import 'package:mt_data_helper/data_helper.dart';
 
-abstract class MTDataSource<T> {
+abstract class MTDataSource<T extends MTData> {
   final Completer<void> initCompleter = Completer<void>();
 
   Future<void> get initialized => initCompleter.future;
@@ -19,11 +20,11 @@ abstract class MTDataSource<T> {
 
   Future<List<T>> fetchData();
 
-  Future<void> insertData(T data);
+  Future<void> batchInsertData(List<MTDataRow<T>> data);
 
-  Future<void> updateData(T data);
+  Future<void> batchUpdateData(List<MTDataRow<T>> data);
 
-  Future<void> deleteData(T data);
+  Future<void> batchDeleteData(List<MTDataRow<T>> data);
 }
 
 class MTDatasourceConfig {

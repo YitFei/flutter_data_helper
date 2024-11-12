@@ -1,19 +1,19 @@
 import 'dart:collection';
 import 'package:mt_data_helper/src/mt_data_row.dart';
 
-typedef RowAddedCallback<E> = void Function(MTDataRow<E> row);
-typedef RowRemovedCallback<E> = void Function(MTDataRow<E> row);
-typedef RowModifiedCallback<E> = void Function(
+typedef RowAddedCallback<E extends MTData> = void Function(MTDataRow<E> row);
+typedef RowRemovedCallback<E extends MTData> = void Function(MTDataRow<E> row);
+typedef RowModifiedCallback<E extends MTData> = void Function(
     String columnName, MTDataRow<E> row);
 
-class RowModification<E> {
+class RowModification<E extends MTData> {
   final String columnName;
   final MTDataRow<E> row;
 
   RowModification(this.columnName, this.row);
 }
 
-class MTDataRows<E> extends ListBase<MTDataRow<E>> {
+class MTDataRows<E extends MTData> extends ListBase<MTDataRow<E>> {
   final List<MTDataRow<E>> _innerList;
   final bool fullRows;
 

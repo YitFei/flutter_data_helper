@@ -5,7 +5,7 @@ import 'package:mt_data_helper/src/list_extension.dart';
 import 'package:mt_data_helper/src/mt_data_row.dart';
 import 'package:mt_data_helper/src/mt_data_rows.dart';
 
-class MTDatatable<E> {
+class MTDatatable<E extends MTData> {
   final List<MTDataRow<E>> _rows = [];
   late MTDataRows<E> _rowsWrapper;
   MTDataRows<E> get rows => _rowsWrapper;
@@ -89,7 +89,7 @@ class MTDatatable<E> {
   }
 }
 
-class RowChanges<T> {
+class RowChanges<T extends MTData> {
   List<MTDataRow<T>> inserted;
   List<MTDataRow<T>> updated;
   List<MTDataRow<T>> deleted;

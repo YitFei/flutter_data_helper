@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:mt_data_helper/data_helper.dart';
 
-class MTDataAdapter<T> {
+class MTDataAdapter<T extends MTData> {
   late MTDatatable<T> _originalDatatable;
   late MTDatatable<T> _datatable;
   MTDatatable<T> get originalDatatable => _originalDatatable;
@@ -14,7 +14,7 @@ class MTDataAdapter<T> {
     _datatable = MTDatatable<T>();
   }
 
-  static Future<MTDataAdapter<T>> initialize<T>(
+  static Future<MTDataAdapter<T>> initialize<T extends MTData>(
       MTDataSource<T> datasource) async {
     final adapter = MTDataAdapter<T>._(datasource);
     await adapter._initialize();
@@ -36,19 +36,15 @@ class MTDataAdapter<T> {
     _originalDatatable = _datatable.deepCopy();
   }
 
-  void update() async {
+  void update({bool acceptChanges = true}) async {
     RowChanges<T> rowChanges = datatable.getChanges();
 
-    for (MTDataRow<T> dr in rowChanges.inserted) {
-      await dataSource.insertData(dr.data);
-    }
+    await dataSource.batchInsertData(rowChanges.inserted);
+    await dataSource.batchUpdateData(rowChanges.updated);
+    await dataSource.batchDeleteData(rowChanges.deleted);
 
-    for (MTDataRow<T> dr in rowChanges.updated) {
-      await dataSource.updateData(dr.data);
-    }
-
-    for (MTDataRow<T> dr in rowChanges.deleted) {
-      await dataSource.deleteData(dr.data);
+    if (acceptChanges) {
+      datatable.acceptChanges();
     }
   }
 }
