@@ -1,25 +1,22 @@
 import 'dart:async';
 
-import 'package:data_helper/src/data_source.dart';
-import 'package:data_helper/src/mt_data_row.dart';
-import 'package:data_helper/src/mt_data_rows.dart';
-import 'package:data_helper/src/mt_datatable.dart';
-import 'package:data_helper/src/printing.dart';
+import 'package:mt_data_helper/data_helper.dart';
 
-class DataAdapter<T> {
+class MTDataAdapter<T> {
   late MTDatatable<T> _originalDatatable;
   late MTDatatable<T> _datatable;
   MTDatatable<T> get originalDatatable => _originalDatatable;
   MTDatatable<T> get datatable => _datatable;
-  late final IDataSource<T> dataSource;
+  late final MTDataSource<T> dataSource;
 
-  DataAdapter._(this.dataSource) {
+  MTDataAdapter._(this.dataSource) {
     _originalDatatable = MTDatatable<T>().deepCopy();
     _datatable = MTDatatable<T>();
   }
 
-  static Future<DataAdapter<T>> initialize<T>(IDataSource<T> datasource) async {
-    final adapter = DataAdapter<T>._(datasource);
+  static Future<MTDataAdapter<T>> initialize<T>(
+      MTDataSource<T> datasource) async {
+    final adapter = MTDataAdapter<T>._(datasource);
     await adapter._initialize();
     return adapter;
   }

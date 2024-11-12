@@ -1,13 +1,13 @@
 import 'dart:async';
 
-abstract class IDataSource<T> {
+abstract class MTDataSource<T> {
   final Completer<void> initCompleter = Completer<void>();
 
   Future<void> get initialized => initCompleter.future;
 
-  final DatasourceConfig config;
+  final MTDatasourceConfig config;
 
-  IDataSource(this.config) {
+  MTDataSource(this.config) {
     initialize().then((_) {
       initCompleter.complete();
     }).catchError((error) {
@@ -26,10 +26,10 @@ abstract class IDataSource<T> {
   Future<void> deleteData(T data);
 }
 
-class DatasourceConfig {
+class MTDatasourceConfig {
   final String tableName;
   final String primaryKeyName;
-  DatasourceConfig({
+  MTDatasourceConfig({
     required this.tableName,
     required this.primaryKeyName,
   });

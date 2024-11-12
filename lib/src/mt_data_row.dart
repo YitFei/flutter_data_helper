@@ -1,4 +1,4 @@
-import 'package:data_helper/src/mt_data_rows.dart';
+import 'package:mt_data_helper/src/mt_data_rows.dart';
 
 class MTDataRow<T> {
   RowState rowState;

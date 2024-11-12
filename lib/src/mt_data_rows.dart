@@ -1,6 +1,5 @@
 import 'dart:collection';
-import 'package:data_helper/src/mt_data_row.dart';
-import 'package:data_helper/src/printing.dart';
+import 'package:mt_data_helper/src/mt_data_row.dart';
 
 typedef RowAddedCallback<E> = void Function(MTDataRow<E> row);
 typedef RowRemovedCallback<E> = void Function(MTDataRow<E> row);

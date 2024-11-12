@@ -1,7 +1,7 @@
-import 'package:data_helper/src/mt_data_row.dart';
-import 'package:data_helper/src/mt_data_rows.dart';
-import 'package:data_helper/src/mt_datatable.dart';
-import 'package:data_helper/src/printing.dart';
+import 'package:mt_data_helper/src/mt_data_row.dart';
+import 'package:mt_data_helper/src/mt_data_rows.dart';
+import 'package:mt_data_helper/src/mt_datatable.dart';
+import 'package:mt_data_helper/src/printing.dart';
 
 extension DeepCopyList on List<Map<String, dynamic>> {
   // `Map.from()` creates a new Map for each map, thus replicating all key-value pairs.

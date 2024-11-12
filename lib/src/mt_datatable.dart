@@ -1,10 +1,9 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:async';
 import 'dart:collection';
-
-import 'package:data_helper/src/list_extension.dart';
-import 'package:data_helper/src/mt_data_row.dart';
-import 'package:data_helper/src/mt_data_rows.dart';
+import 'package:mt_data_helper/src/list_extension.dart';
+import 'package:mt_data_helper/src/mt_data_row.dart';
+import 'package:mt_data_helper/src/mt_data_rows.dart';
 
 class MTDatatable<E> {
   final List<MTDataRow<E>> _rows = [];
