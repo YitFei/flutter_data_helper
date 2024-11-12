@@ -20,11 +20,11 @@ abstract class MTDataSource<T extends MTData> {
 
   Future<List<T>> fetchData();
 
-  Future<void> batchInsertData(List<MTDataRow<T>> data);
+  Future<void> batchInsertData(List<MTDataRow<T>> datarows);
 
-  Future<void> batchUpdateData(List<MTDataRow<T>> data);
+  Future<void> batchUpdateData(List<MTDataRow<T>> datarows);
 
-  Future<void> batchDeleteData(List<MTDataRow<T>> data);
+  Future<void> batchDeleteData(List<MTDataRow<T>> datarows);
 }
 
 class MTDatasourceConfig<T extends MTData> {
