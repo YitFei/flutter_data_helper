@@ -1,0 +1,128 @@
+import 'package:sqflite/sqflite.dart';
+import 'package:path/path.dart';
+
+class SQLiteDataSource implements IDataSource {
+  Database? _database;
+
+  @override
+  Future<void> initialize() async {
+    final databasesPath = await getDatabasesPath();
+    final path = join(databasesPath, 'my_database.db');
+
+    _database = await openDatabase(
+      path,
+      version: 1,
+      onCreate: (db, version) async {
+   
+      },
+    );
+  }
+
+  @override
+  Future<List<Map<String, dynamic>>> fetchData(String selectCommand) async {
+    if (_database == null) {
+      await initialize();
+    }
+    return await _database!.rawQuery(selectCommand);
+  }
+
+  @override
+  Future<void> insertData(String insertCommand, List<dynamic> parameters) async {
+    if (_database == null) {
+      await initialize();
+    }
+    await _database!.rawInsert(insertCommand, parameters);
+  }
+
+  @override
+  Future<void> updateData(String updateCommand, List<dynamic> parameters) async {
+    if (_database == null) {
+      await initialize();
+    }
+    await _database!.rawUpdate(updateCommand, parameters);
+  }
+
+  @override
+  Future<void> deleteData(String deleteCommand, List<dynamic> parameters) async {
+    if (_database == null) {
+      await initialize();
+    }
+    await _database!.rawDelete(deleteCommand, parameters);
+  }
+}
+
+
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+
+class APIDataSource implements IDataSource {
+  final String baseUrl;
+  final String fetchEndpoint;
+  final String insertEndpoint;
+  final String updateEndpoint;
+  final String deleteEndpoint;
+
+  APIDataSource({
+    required this.baseUrl,
+    required this.fetchEndpoint,
+    required this.insertEndpoint,
+    required this.updateEndpoint,
+    required this.deleteEndpoint,
+  });
+
+  @override
+  Future<void> initialize() async {
+    // 初始化 API 连接（如果需要）
+  }
+
+  @override
+  Future<List<Map<String, dynamic>>> fetchData(String selectCommand) async {
+    final response = await http.get(Uri.parse('$baseUrl$fetchEndpoint'));
+
+    if (response.statusCode == 200) {
+      List<dynamic> data = jsonDecode(response.body);
+      return data.cast<Map<String, dynamic>>();
+    } else {
+      throw Exception('Failed to fetch data from API');
+    }
+  }
+
+  @override
+  Future<void> insertData(String insertCommand, List<dynamic> parameters) async {
+    final response = await http.post(
+      Uri.parse('$baseUrl$insertEndpoint'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({'command': insertCommand, 'parameters': parameters}),
+    );
+
+    if (response.statusCode != 200) {
+      throw Exception('Failed to insert data via API');
+    }
+  }
+
+  @override
+  Future<void> updateData(String updateCommand, List<dynamic> parameters) async {
+    final response = await http.put(
+      Uri.parse('$baseUrl$updateEndpoint'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({'command': updateCommand, 'parameters': parameters}),
+    );
+
+    if (response.statusCode != 200) {
+      throw Exception('Failed to update data via API');
+    }
+  }
+
+  @override
+  Future<void> deleteData(String deleteCommand, List<dynamic> parameters) async {
+    final response = await http.delete(
+      Uri.parse('$baseUrl$deleteEndpoint'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({'command': deleteCommand, 'parameters': parameters}),
+    );
+
+    if (response.statusCode != 200) {
+      throw Exception('Failed to delete data via API');
+    }
+  }
+}

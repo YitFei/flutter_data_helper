@@ -1,0 +1,270 @@
+import 'dart:math';
+import 'package:data_helper/src/mt_data.dart';
+
+class MTDataRows<E> implements List<MTDataRow<E>> {
+  final List<MTDataRow<E>> _list = [];
+  @override
+  MTDataRow<E> get first => _list.first;
+
+  @override
+  MTDataRow<E> get last => _list.last;
+
+  @override
+  int get length => _list.length;
+
+  @override
+  set length(int newLength) {
+    _list.length = newLength;
+  }
+
+  @override
+  List<MTDataRow<E>> operator +(List<MTDataRow<E>> other) {
+    return List<MTDataRow<E>>.from(_list)..addAll(other);
+  }
+
+  @override
+  MTDataRow<E> operator [](int index) => _list[index];
+
+  @override
+  void operator []=(int index, MTDataRow<E> value) {
+    _list[index] = value;
+    _list[index].rowState = RowState.modified;
+  }
+
+  @override
+  void add(MTDataRow<E> element) {
+    _list.add(element);
+    element.rowState = RowState.added;
+  }
+
+  @override
+  void addAll(Iterable<MTDataRow<E>> iterable) {
+    _list.addAll(iterable.map((e) => e..rowState = RowState.added));
+  }
+
+  @override
+  bool any(bool Function(MTDataRow<E> element) test) => _list.any(test);
+
+  @override
+  Map<int, MTDataRow<E>> asMap() => _list.asMap();
+
+  @override
+  List<R> cast<R>() => _list.cast<R>();
+
+  @override
+  void clear() {
+    _list.clear();
+  }
+
+  @override
+  bool contains(Object? element) => _list.contains(element);
+
+  @override
+  MTDataRow<E> elementAt(int index) => _list.elementAt(index);
+
+  @override
+  bool every(bool Function(MTDataRow<E> element) test) => _list.every(test);
+
+  @override
+  Iterable<T> expand<T>(Iterable<T> Function(MTDataRow<E> element) f) =>
+      _list.expand(f);
+
+  @override
+  void fillRange(int start, int end, [MTDataRow<E>? fill]) {
+    _list.fillRange(start, end, fill);
+  }
+
+  @override
+  MTDataRow<E> firstWhere(bool Function(MTDataRow<E> element) test,
+      {MTDataRow<E> Function()? orElse}) {
+    return _list.firstWhere(test, orElse: orElse);
+  }
+
+  @override
+  T fold<T>(T initialValue,
+      T Function(T previousValue, MTDataRow<E> element) combine) {
+    return _list.fold(initialValue, combine);
+  }
+
+  @override
+  Iterable<MTDataRow<E>> followedBy(Iterable<MTDataRow<E>> other) =>
+      _list.followedBy(other);
+
+  @override
+  void forEach(void Function(MTDataRow<E> element) action) {
+    _list.forEach(action);
+  }
+
+  @override
+  Iterable<MTDataRow<E>> getRange(int start, int end) =>
+      _list.getRange(start, end);
+
+  @override
+  int indexOf(MTDataRow<E> element, [int start = 0]) =>
+      _list.indexOf(element, start);
+
+  @override
+  int indexWhere(bool Function(MTDataRow<E> element) test, [int start = 0]) =>
+      _list.indexWhere(test, start);
+
+  @override
+  void insert(int index, MTDataRow<E> element) {
+    _list.insert(index, element..rowState = RowState.added);
+  }
+
+  @override
+  void insertAll(int index, Iterable<MTDataRow<E>> iterable) {
+    _list.insertAll(index, iterable);
+  }
+
+  @override
+  bool get isEmpty => _list.isEmpty;
+
+  @override
+  bool get isNotEmpty => _list.isNotEmpty;
+
+  @override
+  Iterator<MTDataRow<E>> get iterator => _list.iterator;
+
+  @override
+  String join([String separator = ""]) => _list.join(separator);
+
+  @override
+  int lastIndexOf(MTDataRow<E> element, [int? start]) =>
+      _list.lastIndexOf(element, start);
+
+  @override
+  int lastIndexWhere(bool Function(MTDataRow<E> element) test, [int? start]) =>
+      _list.lastIndexWhere(test, start);
+
+  @override
+  MTDataRow<E> lastWhere(bool Function(MTDataRow<E> element) test,
+      {MTDataRow<E> Function()? orElse}) {
+    return _list.lastWhere(test, orElse: orElse);
+  }
+
+  @override
+  MTDataRow<E> reduce(
+      MTDataRow<E> Function(MTDataRow<E> value, MTDataRow<E> element) combine) {
+    return _list.reduce(combine);
+  }
+
+  @override
+  bool remove(Object? value) =>
+      _list.remove((value as MTDataRow)..rowState = RowState.deleted);
+
+  @override
+  MTDataRow<E> removeAt(int index) {
+    _list[index].rowState = RowState.deleted;
+    return _list[index];
+    return _list.removeAt(index);
+  }
+
+  @override
+  MTDataRow<E> removeLast() {
+    _list.last.rowState = RowState.deleted;
+    return _list.last;
+    return _list.removeLast();
+  }
+
+  @override
+  void removeRange(int start, int end) {
+    for (var i = start; i < end; i++) {
+      _list[i].rowState = RowState.deleted;
+    }
+    // _list.removeRange(start, end);
+  }
+
+  @override
+  void removeWhere(bool Function(MTDataRow<E> element) test) {
+    for (var element in _list.where(test).toList()) {
+      element.rowState = RowState.deleted;
+    }
+    //  _list.removeWhere(test);
+  }
+
+  @override
+  void replaceRange(int start, int end, Iterable<MTDataRow<E>> replacements) {
+    _list.replaceRange(start, end, replacements);
+  }
+
+  @override
+  void retainWhere(bool Function(MTDataRow<E> element) test) {
+    _list.retainWhere(test);
+  }
+
+  @override
+  Iterable<MTDataRow<E>> get reversed => _list.reversed;
+
+  @override
+  void setAll(int index, Iterable<MTDataRow<E>> iterable) {
+    _list.setAll(index, iterable);
+  }
+
+  @override
+  void setRange(int start, int end, Iterable<MTDataRow<E>> iterable,
+      [int skipCount = 0]) {
+    _list.setRange(start, end, iterable, skipCount);
+  }
+
+  @override
+  MTDataRow<E> get single => _list.single;
+
+  @override
+  MTDataRow<E> singleWhere(bool Function(MTDataRow<E> element) test,
+      {MTDataRow<E> Function()? orElse}) {
+    return _list.singleWhere(test, orElse: orElse);
+  }
+
+  @override
+  Iterable<MTDataRow<E>> skip(int count) => _list.skip(count);
+
+  @override
+  Iterable<MTDataRow<E>> skipWhile(bool Function(MTDataRow<E> value) test) =>
+      _list.skipWhile(test);
+
+  @override
+  void sort([int Function(MTDataRow<E> a, MTDataRow<E> b)? compare]) {
+    _list.sort(compare);
+  }
+
+  @override
+  List<MTDataRow<E>> sublist(int start, [int? end]) =>
+      _list.sublist(start, end);
+
+  @override
+  Iterable<MTDataRow<E>> take(int count) => _list.take(count);
+
+  @override
+  Iterable<MTDataRow<E>> takeWhile(bool Function(MTDataRow<E> value) test) =>
+      _list.takeWhile(test);
+
+  @override
+  List<MTDataRow<E>> toList({bool growable = true}) =>
+      _list.toList(growable: growable);
+
+  @override
+  Set<MTDataRow<E>> toSet() => _list.toSet();
+
+  @override
+  Iterable<MTDataRow<E>> where(bool Function(MTDataRow<E> element) test) =>
+      _list.where(test);
+
+  @override
+  Iterable<T> whereType<T>() => _list.whereType<T>();
+
+  @override
+  set first(MTDataRow<E> value) => _list.first = value;
+
+  @override
+  set last(MTDataRow<E> value) => _list.last = value;
+
+  @override
+  Iterable<T> map<T>(T Function(MTDataRow<E> e) toElement) =>
+      _list.map(toElement);
+
+  @override
+  void shuffle([Random? random]) => _list.shuffle(random);
+}
+
+
