@@ -1,10 +1,10 @@
 // ignore_for_file: avoid_print
-import 'package:data_helper/data_helper.dart';
-import 'package:data_helper/src/data_source.dart';
-import 'package:data_helper/src/list_extension.dart';
-import 'package:data_helper/src/mt_data_row.dart';
-import 'package:data_helper/src/mt_datatable.dart';
-import 'package:data_helper/src/printing.dart';
+import 'package:mt_data_helper/src/mt_data_adapter.dart';
+import 'package:mt_data_helper/src/mt_data_source.dart';
+import 'package:mt_data_helper/src/list_extension.dart';
+import 'package:mt_data_helper/src/mt_data_row.dart';
+import 'package:mt_data_helper/src/mt_datatable.dart';
+import 'package:mt_data_helper/src/printing.dart';
 
 List<MTDataRow<Map<String, dynamic>>> mockData = [
   MTDataRow(data: {"name": "a", "title": "1"}),
@@ -17,13 +17,14 @@ void main() async {
   datatable.load(mockData);
 
   var ds = SqlDatasource<Map<String, dynamic>>(
-      DatasourceConfig(tableName: '', primaryKeyName: ''));
-  DataAdapter<Map<String, dynamic>> adapter = await DataAdapter.initialize(ds);
+      MTDatasourceConfig(tableName: '', primaryKeyName: ''));
+  MTDataAdapter<Map<String, dynamic>> adapter =
+      await MTDataAdapter.initialize(ds);
 
   await adapter.fill(datatable);
 }
 
-class SqlDatasource<T> extends IDataSource<T> {
+class SqlDatasource<T> extends MTDataSource<T> {
   SqlDatasource(super.config);
 
   @override
