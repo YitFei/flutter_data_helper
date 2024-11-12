@@ -6,7 +6,7 @@ abstract class MTDataSource<T extends MTData> {
 
   Future<void> get initialized => initCompleter.future;
 
-  final MTDatasourceConfig config;
+  final MTDatasourceConfig<T> config;
 
   MTDataSource(this.config) {
     initialize().then((_) {
@@ -27,11 +27,12 @@ abstract class MTDataSource<T extends MTData> {
   Future<void> batchDeleteData(List<MTDataRow<T>> data);
 }
 
-class MTDatasourceConfig {
+class MTDatasourceConfig<T extends MTData> {
   final String tableName;
   final String primaryKeyName;
-  MTDatasourceConfig({
-    required this.tableName,
-    required this.primaryKeyName,
-  });
+  final T Function(Map<String, dynamic>) fromMap;
+  MTDatasourceConfig(
+      {required this.tableName,
+      required this.primaryKeyName,
+      required this.fromMap});
 }

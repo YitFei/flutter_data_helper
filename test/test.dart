@@ -17,10 +17,12 @@ void main() async {
     MTDataRow(data: MTMap({"name": "1"}))
   ]);
 
-  var ds = SqlDatasource<MTMap>(
-      MTDatasourceConfig(tableName: '', primaryKeyName: ''));
+  var ds = SqlDatasource<MTMap>(MTDatasourceConfig(
+      tableName: '', primaryKeyName: '', fromMap: MTMap.fromMap));
   MTDataAdapter<MTMap> adapter = await MTDataAdapter.initialize(ds);
-
+  List<MTMap> dataList = await ds.fetchData();
+  dataList[0]['name'] = "9943";
+  warningPrint(dataList.map((e) => e['name']).toString());
   await adapter.fill(datatable);
   datatable.newRow = MTDataRow(data: MTMap({"name": "new inserted"}));
   datatable.rows.remove(datatable.rows.last);
@@ -50,7 +52,11 @@ class SqlDatasource<T extends MTData> extends MTDataSource<T> {
 
   @override
   Future<List<T>> fetchData() async {
-    return [];
+    List<Map<String, dynamic>> dataList = [
+      {"name": "a", "title": "1"}
+    ];
+
+    return dataList.map((data) => config.fromMap(data)).toList();
   }
 
   @override
