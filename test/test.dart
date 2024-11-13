@@ -12,25 +12,34 @@ import 'package:mt_data_helper/src/printing.dart';
 //   MTDataRow(data: {"name": "d", "title": "4"}),
 // ];
 void main() async {
-  MTDatatable<MTMap> datatable = MTDatatable();
-  datatable.load([
-    MTDataRow(data: MTMap({"name": "1"}))
-  ]);
+  // MTDatatable<MTMap> datatable = MTDatatable();
+  // datatable.load([
+  //   MTDataRow(data: MTMap({"name": "1"}))
+  // ]);
 
-  var ds = SqlDatasource<MTMap>(MTDatasourceConfig(
-      tableName: '', primaryKeyName: '', fromMap: MTMap.fromMap));
-  MTDataAdapter<MTMap> adapter = await MTDataAdapter.initialize(ds);
+  // var ds = SqlDatasource<MTMap>(MTDatasourceConfig(
+  //     tableName: '', primaryKeyName: '', fromMap: MTMap.fromMap));
+  // MTDataAdapter<MTMap> adapter = await MTDataAdapter.initialize(ds);
   // List<MTMap> dataList = await ds.fetchData();
   // dataList[0]['name'] = "9943";
   // warningPrint(dataList.map((e) => e['name']).toString());
+
+  MTDatatable<Test> datatable = MTDatatable();
+  datatable.load([MTDataRow(data: Test(name: "123"))]);
+  var ds = SqlDatasource<Test>(MTDatasourceConfig(
+      tableName: '', primaryKeyName: '', fromMap: Test.fromMap));
+  MTDataAdapter<Test> adapter = await MTDataAdapter.initialize(ds);
   await adapter.fill(datatable);
-  datatable.newRow = MTDataRow(data: MTMap({"name": "new inserted"}));
-  datatable.rows.remove(datatable.rows.first);
+  var newDataRow = MTDataRow(data: Test(name: "123"));
+  datatable.rows.insert(0, newDataRow);
+  // datatable.rows.remove(newDataRow);
+  // datatable.newRow = ;
+  // datatable.rows.remove(datatable.rows.first);
   warningPrint(
       "Before Update -> ${datatable.fullRows.map((dr) => dr.rowState).toString()}");
-  // await adapter.update();
+  await adapter.update();
 
-  datatable.acceptChanges();
+  // datatable.acceptChanges();
 
   warningPrint(datatable.fullRows.map((dr) => dr.rowState).toString());
 }
@@ -45,9 +54,9 @@ class SqlDatasource<T extends MTData> extends MTDataSource<T> {
   }
 
   @override
-  Future<void> batchInsertData(List<MTDataRow<T>> data) async {
+  Future<void> batchInsertData(List<MTDataRow<T>> list) async {
     infoPrint("inserted");
-    warningPrint(data.map((e) => e.data.toMap()['name']).toString());
+    warningPrint(list.map((e) => e.data.toMap()['name']).toString());
   }
 
   @override

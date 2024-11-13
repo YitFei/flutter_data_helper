@@ -2,15 +2,7 @@ import 'package:mt_data_helper/src/mt_data_rows.dart';
 import 'package:mt_data_helper/src/printing.dart';
 
 class MTDataRow<T extends MTData> {
-  final T _data;
-  T get data => _data;
-
-  // set data(T newData) {
-  //   _data = newData;
-  //   if (rowState == RowState.unchanged) {
-  //     rowState = RowState.modified;
-  //   }
-  // }
+  T data;
 
   RowState _rowState;
   RowState get rowState => _rowState;
@@ -27,9 +19,8 @@ class MTDataRow<T extends MTData> {
     }
   }
 
-  MTDataRow({required T data, RowState rowState = RowState.unchanged})
-      : _data = data,
-        _rowState = rowState;
+  MTDataRow({required this.data, RowState rowState = RowState.unchanged})
+      : _rowState = rowState;
 
   RowModifiedCallback<T>? _onModified;
 
@@ -49,7 +40,7 @@ class MTDataRow<T extends MTData> {
   }
 
   void operator []=(String key, dynamic value) {
-    var data = _data as Map<String, dynamic>;
+    var data = this.data as Map<String, dynamic>;
     if (data[key] != value) {
       data[key] = value;
 
