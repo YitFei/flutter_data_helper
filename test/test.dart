@@ -28,7 +28,9 @@ void main() async {
   datatable.rows.remove(datatable.rows.first);
   warningPrint(
       "Before Update -> ${datatable.fullRows.map((dr) => dr.rowState).toString()}");
-  await adapter.update();
+  // await adapter.update();
+
+  datatable.acceptChanges();
 
   warningPrint(datatable.fullRows.map((dr) => dr.rowState).toString());
 }
