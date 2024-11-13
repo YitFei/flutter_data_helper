@@ -16,6 +16,10 @@ class MTDataRow<T extends MTData> {
   RowState get rowState => _rowState;
 
   set rowState(RowState newState) {
+    if (_rowState == RowState.added && newState == RowState.deleted) {
+      _rowState = RowState.detached;
+      return;
+    }
     if (_rowState == RowState.added && newState == RowState.modified) {
       return;
     } else {
@@ -59,7 +63,7 @@ class MTDataRow<T extends MTData> {
   }
 }
 
-enum RowState { added, modified, deleted, unchanged }
+enum RowState { added, modified, deleted, unchanged, detached }
 
 abstract class MTData {
   MTData fromMap(Map<String, dynamic> map);
@@ -85,7 +89,9 @@ class MTMap implements MTData, Map<String, dynamic> {
 
   @override
   MTMap copyWith({Map<String, dynamic>? data}) {
-    return MTMap(data ?? _data);
+    return MTMap(data != null
+        ? Map<String, dynamic>.from(data)
+        : Map<String, dynamic>.from(_data));
   }
 
   factory MTMap.fromMap(Map<String, dynamic> map) {

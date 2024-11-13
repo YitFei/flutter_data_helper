@@ -16,21 +16,19 @@ void main() async {
   datatable.load([
     MTDataRow(data: MTMap({"name": "1"}))
   ]);
-  datatable.rows.add(MTDataRow(data: MTMap({"name": "2"})));
-  //
-  // datatable.rows[0]['name'] = "hehe";
-  // datatable.rows[1]['name'] = "ppy";
-  // datatable.rows.remove(datatable.rows.last);
-  // var ds = SqlDatasource<MTMap>(MTDatasourceConfig(
-  //     tableName: '', primaryKeyName: '', fromMap: MTMap.fromMap));
-  // MTDataAdapter<MTMap> adapter = await MTDataAdapter.initialize(ds);
+
+  var ds = SqlDatasource<MTMap>(MTDatasourceConfig(
+      tableName: '', primaryKeyName: '', fromMap: MTMap.fromMap));
+  MTDataAdapter<MTMap> adapter = await MTDataAdapter.initialize(ds);
   // List<MTMap> dataList = await ds.fetchData();
   // dataList[0]['name'] = "9943";
   // warningPrint(dataList.map((e) => e['name']).toString());
-  // await adapter.fill(datatable);
-  // datatable.newRow = MTDataRow(data: MTMap({"name": "new inserted"}));
-  // datatable.rows.remove(datatable.rows.last);
-  // adapter.update();
+  await adapter.fill(datatable);
+  datatable.newRow = MTDataRow(data: MTMap({"name": "new inserted"}));
+  datatable.rows.remove(datatable.rows.first);
+  warningPrint(
+      "Before Update -> ${datatable.fullRows.map((dr) => dr.rowState).toString()}");
+  await adapter.update();
 
   warningPrint(datatable.fullRows.map((dr) => dr.rowState).toString());
 }

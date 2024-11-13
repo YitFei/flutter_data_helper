@@ -67,9 +67,7 @@ class MTDatatable<E extends MTData> {
   }
 
   void acceptChanges() {
-    for (var row in rows) {
-      row.endEdit();
-    }
+    rows.acceptChanges();
   }
 
   void clear() {

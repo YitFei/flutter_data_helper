@@ -35,7 +35,8 @@ class MTDataRows<E extends MTData> extends ListBase<MTDataRow<E>> {
       if (fullRows) {
         indices.add(i);
       } else {
-        if (_innerList[i].rowState != RowState.deleted) {
+        if (_innerList[i].rowState != RowState.deleted &&
+            _innerList[i].rowState != RowState.detached) {
           indices.add(i);
         }
       }
@@ -137,5 +138,14 @@ class MTDataRows<E extends MTData> extends ListBase<MTDataRow<E>> {
   @override
   Iterator<MTDataRow<E>> get iterator {
     return _activeIndices.map((i) => _innerList[i]).iterator;
+  }
+
+  void acceptChanges() {
+    _innerList.removeWhere((row) => row.rowState == RowState.detached);
+    for (var row in _innerList) {
+      if (row.rowState != RowState.detached) {
+        row.endEdit();
+      }
+    }
   }
 }
