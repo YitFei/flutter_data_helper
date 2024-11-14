@@ -31,17 +31,17 @@ void main() async {
   MTDataAdapter<Test> adapter = await MTDataAdapter.initialize(ds);
   await adapter.fill(datatable);
   var newDataRow = MTDataRow(data: Test(name: "123"));
-  datatable.rows.insert(0, newDataRow);
-  // datatable.rows.remove(newDataRow);
+  datatable.rows.insert(0, newDataRow.deepCopy());
+//  datatable.rows.remove(newDataRow);
   // datatable.newRow = ;
   // datatable.rows.remove(datatable.rows.first);
   warningPrint(
-      "Before Update -> ${datatable.fullRows.map((dr) => dr.rowState).toString()}");
+      "Before Update -> ${datatable.rows.map((dr) => dr.rowState).toString()}");
   await adapter.update();
 
   // datatable.acceptChanges();
 
-  warningPrint(datatable.fullRows.map((dr) => dr.rowState).toString());
+  // warningPrint(datatable.fullRows.map((dr) => dr.rowState).toString());
 }
 
 class SqlDatasource<T extends MTData> extends MTDataSource<T> {

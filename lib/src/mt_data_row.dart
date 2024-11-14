@@ -1,5 +1,4 @@
 import 'package:mt_data_helper/src/mt_data_rows.dart';
-import 'package:mt_data_helper/src/printing.dart';
 
 class MTDataRow<T extends MTData> {
   T data;
@@ -51,6 +50,13 @@ class MTDataRow<T extends MTData> {
 
   void endEdit() {
     this.rowState = RowState.unchanged;
+  }
+
+  MTDataRow<T> deepCopy() {
+    return MTDataRow<T>(
+      data: this.data.copyWith() as T,
+      rowState: this.rowState,
+    );
   }
 }
 
