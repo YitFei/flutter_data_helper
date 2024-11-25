@@ -144,9 +144,32 @@ class MTDataRows<E extends MTData> extends ListBase<MTDataRow<E>> {
     _innerList.removeWhere((row) =>
         row.rowState == RowState.detached || row.rowState == RowState.deleted);
     for (var row in _innerList) {
-      if (row.rowState != RowState.detached) {
-        row.endEdit();
+      row.endEdit();
+    }
+  }
+
+  void discardChanges() {
+    List<MTDataRow<E>> rowsToRemove = [];
+
+    for (var row in _innerList) {
+      switch (row.rowState) {
+        case RowState.added:
+          rowsToRemove.add(row);
+          break;
+        case RowState.modified:
+          row.discardChanges();
+          break;
+        case RowState.deleted:
+          row.discardChanges();
+          break;
+        default:
+          break;
       }
+    }
+
+    for (var row in rowsToRemove) {
+      _innerList.remove(row);
+      onRowRemoved?.call(row);
     }
   }
 }

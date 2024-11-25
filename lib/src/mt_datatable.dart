@@ -5,7 +5,7 @@ import 'package:mt_data_helper/src/list_extension.dart';
 import 'package:mt_data_helper/src/mt_data_row.dart';
 import 'package:mt_data_helper/src/mt_data_rows.dart';
 
-class MTDatatable<E extends MTData> {
+class MTDataTable<E extends MTData> {
   final List<MTDataRow<E>> _rows = [];
   late MTDataRows<E> _rowsWrapper;
   MTDataRows<E> get rows => _rowsWrapper;
@@ -25,7 +25,7 @@ class MTDatatable<E extends MTData> {
   Stream<MTDataRow<E>> get onRowDeleted => _rowDeletedController.stream;
   Stream<RowModification<E>> get onRowModified => _rowModifiedController.stream;
 
-  MTDatatable() {
+  MTDataTable() {
     _loadRowsWrapper();
   }
 
@@ -58,16 +58,20 @@ class MTDatatable<E extends MTData> {
   //* Features
   set newRow(MTDataRow<E> row) => rows.add(row);
 
-  MTDatatable<E> deepCopy() {
+  MTDataTable<E> deepCopy() {
     return rows.deepCopy().toDatatable();
   }
 
-  MTDatatable<E> shallowCopy() {
+  MTDataTable<E> shallowCopy() {
     return rows.shallowCopy().toDatatable();
   }
 
   void acceptChanges() {
     rows.acceptChanges();
+  }
+
+  void discardChanges() {
+    rows.discardChanges();
   }
 
   void clear() {

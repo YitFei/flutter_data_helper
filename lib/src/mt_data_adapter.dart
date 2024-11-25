@@ -3,15 +3,15 @@ import 'dart:async';
 import 'package:mt_data_helper/data_helper.dart';
 
 class MTDataAdapter<T extends MTData> {
-  late MTDatatable<T> _originalDatatable;
-  late MTDatatable<T> _datatable;
-  MTDatatable<T> get originalDatatable => _originalDatatable;
-  MTDatatable<T> get datatable => _datatable;
+  late MTDataTable<T> _originalDatatable;
+  late MTDataTable<T> _datatable;
+  MTDataTable<T> get originalDatatable => _originalDatatable;
+  MTDataTable<T> get datatable => _datatable;
   late final MTDataSource<T> dataSource;
 
   MTDataAdapter._(this.dataSource) {
-    _originalDatatable = MTDatatable<T>().deepCopy();
-    _datatable = MTDatatable<T>();
+    _originalDatatable = MTDataTable<T>().deepCopy();
+    _datatable = MTDataTable<T>();
   }
 
   static Future<MTDataAdapter<T>> initialize<T extends MTData>(
@@ -27,8 +27,8 @@ class MTDataAdapter<T extends MTData> {
     }
   }
 
-  Future<void> fill(MTDatatable<T>? datatable) async {
-    _datatable = datatable ?? MTDatatable();
+  Future<void> fill(MTDataTable<T>? datatable) async {
+    _datatable = datatable ?? MTDataTable();
     final List<T> dataList = await dataSource.fetchData();
 
     _datatable.clear();

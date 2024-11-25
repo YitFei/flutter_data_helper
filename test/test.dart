@@ -12,7 +12,7 @@ import 'package:mt_data_helper/src/printing.dart';
 //   MTDataRow(data: {"name": "d", "title": "4"}),
 // ];
 void main() async {
-  // MTDatatable<MTMap> datatable = MTDatatable();
+  // MTDataTable<MTMap> datatable = MTDataTable();
   // datatable.load([
   //   MTDataRow(data: MTMap({"name": "1"}))
   // ]);
@@ -24,20 +24,27 @@ void main() async {
   // dataList[0]['name'] = "9943";
   // warningPrint(dataList.map((e) => e['name']).toString());
 
-  MTDatatable<Test> datatable = MTDatatable();
-  datatable.load([MTDataRow(data: Test(name: "123"))]);
-  var ds = SqlDatasource<Test>(MTDatasourceConfig(
-      tableName: '', primaryKeyName: '', fromMap: Test.fromMap));
-  MTDataAdapter<Test> adapter = await MTDataAdapter.initialize(ds);
-  await adapter.fill(datatable);
-  var newDataRow = MTDataRow(data: Test(name: "123"));
-  datatable.rows.insert(0, newDataRow.deepCopy());
-//  datatable.rows.remove(newDataRow);
-  // datatable.newRow = ;
-  // datatable.rows.remove(datatable.rows.first);
-  warningPrint(
-      "Before Update -> ${datatable.rows.map((dr) => dr.rowState).toString()}");
-  await adapter.update();
+  MTDataTable<Test> dataTable = MTDataTable();
+
+  dataTable.load([MTDataRow(data: Test(name: "123"))]);
+  dataTable.rows.add(MTDataRow(data: Test(name: "223")));
+
+  dataTable.rows.removeAt(0);
+  dataTable.discardChanges();
+
+  warningPrint("${dataTable.rows.map((dr) => dr.data.name).toString()}");
+//   var ds = SqlDatasource<Test>(MTDatasourceConfig(
+//       tableName: '', primaryKeyName: '', fromMap: Test.fromMap));
+//   MTDataAdapter<Test> adapter = await MTDataAdapter.initialize(ds);
+//   await adapter.fill(datatable);
+//   var newDataRow = MTDataRow(data: Test(name: "123"));
+//   datatable.rows.insert(0, newDataRow.deepCopy());
+// //  datatable.rows.remove(newDataRow);
+//   // datatable.newRow = ;
+//   // datatable.rows.remove(datatable.rows.first);
+//   warningPrint(
+//       "Before Update -> ${datatable.rows.map((dr) => dr.rowState).toString()}");
+//   await adapter.update();
 
   // datatable.acceptChanges();
 

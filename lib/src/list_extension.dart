@@ -29,8 +29,8 @@ import 'package:mt_data_helper/data_helper.dart';
 // }
 
 extension MTDataRowCopyList<T extends MTData> on List<MTDataRow<T>> {
-  MTDatatable<T> toDatatable() {
-    return MTDatatable()..load(this);
+  MTDataTable<T> toDatatable() {
+    return MTDataTable()..load(this);
   }
 
   List<MTDataRow<T>> deepCopy() {

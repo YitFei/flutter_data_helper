@@ -1,7 +1,9 @@
 import 'package:mt_data_helper/src/mt_data_rows.dart';
 
+//* for
 class MTDataRow<T extends MTData> {
   T data;
+  T _originalData;
 
   RowState _rowState;
   RowState get rowState => _rowState;
@@ -19,7 +21,8 @@ class MTDataRow<T extends MTData> {
   }
 
   MTDataRow({required this.data, RowState rowState = RowState.unchanged})
-      : _rowState = rowState;
+      : _rowState = rowState,
+        _originalData = data.copyWith() as T;
 
   RowModifiedCallback<T>? _onModified;
 
@@ -49,7 +52,26 @@ class MTDataRow<T extends MTData> {
   }
 
   void endEdit() {
+    _originalData = data.copyWith() as T;
     this.rowState = RowState.unchanged;
+  }
+
+  void discardChanges() {
+    if (_rowState == RowState.modified) {
+      data = _originalData.copyWith() as T;
+      _rowState = RowState.unchanged;
+    } else if (_rowState == RowState.added) {
+      _rowState = RowState.detached;
+    } else if (_rowState == RowState.deleted) {
+      _rowState = RowState.unchanged;
+    }
+  }
+
+  void acceptChanges() {
+    _originalData = data.copyWith() as T;
+    if (_rowState != RowState.detached && _rowState != RowState.deleted) {
+      _rowState = RowState.unchanged;
+    }
   }
 
   MTDataRow<T> deepCopy() {
@@ -63,6 +85,8 @@ class MTDataRow<T extends MTData> {
 enum RowState { added, modified, deleted, unchanged, detached }
 
 abstract class MTData {
+  // void Function(String key)? onPropertyChanged;
+
   MTData fromMap(Map<String, dynamic> map);
   Map<String, dynamic> toMap();
   MTData copyWith();
@@ -188,4 +212,7 @@ class MTMap implements MTData, Map<String, dynamic> {
       MapEntry<K2, V2> Function(String key, dynamic value) transform) {
     return _data.map<K2, V2>(transform);
   }
+
+  // @override
+  // void Function(String key)? onPropertyChanged;
 }
